@@ -1,0 +1,38 @@
+os: linux
+dist: xenial
+sudo: required
+git:
+  depth: 3
+addons:
+  apt:
+    update: true
+    packages:
+    - pxz
+    - wput
+before_install: git clone https://github.com/rokibhasansagar/MiCodePatchROM.git ${TRAVIS_BUILD_DIR}/TransMiCode
+script:
+  - printf '%s\n' '#!/bin/sh' '' 'echo $$ >> act_sh.pid' 'while true; do' '  echo -en "The Time is --- "' "  date +%r" '  sleep 300' 'done' >${TRAVIS_BUILD_DIR}/TransMiCode/act.sh
+  - cd ${TRAVIS_BUILD_DIR}/TransMiCode
+  - chmod +x ./transport.sh ./act.sh
+  - echo "Running..."; ./act.sh & ./transport.sh
+  - kill $(cat act_sh.pid) || echo "Process is not running."
+after_success: echo "Congratulations! Job Done!"
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key: "$GitOAUTHToken"
+  file_glob: true
+  file: ${TRAVIS_BUILD_DIR}/TransMiCode/upload/MiCodePatchROM-*
+  on:
+    tags: false
+    repo: rokibhasansagar/MiCodePatchROM
+    branch: master
+branches:
+  except:
+    - /^(?i:untagged)-.*$/
+after_deploy:
+  - cd ${TRAVIS_BUILD_DIR}/ && rm -rf TransMiCode/
+  - echo "Cleanup Done!"
+notifications:
+  email:
+  - rokibhasansagar2014@outlook.com
