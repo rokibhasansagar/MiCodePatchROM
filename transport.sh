@@ -2,7 +2,7 @@
 
 DIR=$(pwd)
 
-echo -e "ReEnable PATH and Set Repo & GHR"
+echo -e "ReEnable PATH and Set Repo"
 sudo curl --create-dirs -L -o /usr/local/bin/repo -O -L https://github.com/akhilnarang/repo/raw/master/repo
 sudo chmod a+x /usr/local/bin/repo
 PATH=~/bin:/usr/local/bin:$PATH && echo $PATH
@@ -42,8 +42,8 @@ echo -e "Please be patient, this will take time"
 export XZ_OPT=-9e
 
 if [ $DDF -gt 8192 ]; then
-  echo -e "Compressing and Making 1.75GB parts Because of Huge Data Amount \nBe Patient..."
-  time tar -I pxz -cf - * | split -b 1792M - $DIR/upload/MiCodePatchROM-norepo-$(date +%Y%m%d).tar.xz.
+  echo -e "Compressing and Making 1.5GB parts Because of Huge Data Amount \nBe Patient..."
+  time tar -I pxz -cf - * | split -b 1536M - $DIR/upload/MiCodePatchROM-norepo-$(date +%Y%m%d).tar.xz.
   # Show Total Sizes of the compressed .repo
   echo -en "Final Compressed size of the consolidated checked-out files is ---  "
   du -sh $DIR/upload/
